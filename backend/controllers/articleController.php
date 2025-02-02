@@ -1,7 +1,11 @@
 <?php
-require_once __DIR__ . '/../services/ArticleService.php';
+require_once __DIR__ . '/../service/articleService.php';
 
 header("Content-Type: application/json");
+
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+header("Access-Control-Allow-Headers: Content-Type");
 
 $articleService = new ArticleService();
 

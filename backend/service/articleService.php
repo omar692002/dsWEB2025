@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '../dao/repository/articleRepository.php';
+require_once __DIR__ . '/../dao/repository/articleRepository.php';
 
 class ArticleService {
     private $articleRepository;
