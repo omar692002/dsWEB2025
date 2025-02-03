@@ -13,33 +13,47 @@ class UtilisateurRepository {
     public function getById(int $id): ?Utilisateur {
         $stmt = $this->pdo->prepare("SELECT * FROM utilisateurs WHERE id = ?");
         $stmt->execute([$id]);
-        return $stmt->fetchObject("Utilisateur") ?: null;
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ? new Utilisateur($row) : null; // Create Utilisateur object from row
     }
 
     // Récupérer un utilisateur par email
     public function getByEmail(string $email): ?Utilisateur {
         $stmt = $this->pdo->prepare("SELECT * FROM utilisateurs WHERE email = ?");
         $stmt->execute([$email]);
-        return $stmt->fetchObject("Utilisateur") ?: null;
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ? new Utilisateur($row) : null; // Create Utilisateur object from row
     }
 
     // Récupérer un utilisateur par email et rôle
     public function getByEmailAndRole(string $email, string $role): ?Utilisateur {
         $stmt = $this->pdo->prepare("SELECT * FROM utilisateurs WHERE email = ? AND role = ?");
         $stmt->execute([$email, $role]);
-        return $stmt->fetchObject("Utilisateur") ?: null;
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ? new Utilisateur($row) : null; // Create Utilisateur object from row
     }
 
     // Ajouter un utilisateur
     public function create(Utilisateur $utilisateur): bool {
         $stmt = $this->pdo->prepare("INSERT INTO utilisateurs (nom, email, mot_de_passe, role) VALUES (?, ?, ?, ?)");
-        return $stmt->execute([$utilisateur->nom, $utilisateur->email, password_hash($utilisateur->mot_de_passe, PASSWORD_DEFAULT), $utilisateur->role]);
+        return $stmt->execute([
+            $utilisateur->nom, 
+            $utilisateur->email, 
+            password_hash($utilisateur->mot_de_passe, PASSWORD_DEFAULT), 
+            $utilisateur->role
+        ]);
     }
 
     // Modifier un utilisateur existant
     public function update(Utilisateur $utilisateur): bool {
         $stmt = $this->pdo->prepare("UPDATE utilisateurs SET nom = ?, email = ?, mot_de_passe = ?, role = ? WHERE id = ?");
-        return $stmt->execute([$utilisateur->nom, $utilisateur->email, $utilisateur->mot_de_passe, $utilisateur->role, $utilisateur->id]);
+        return $stmt->execute([
+            $utilisateur->nom, 
+            $utilisateur->email, 
+            $utilisateur->mot_de_passe, 
+            $utilisateur->role, 
+            $utilisateur->id
+        ]);
     }
 
     // Supprimer un utilisateur

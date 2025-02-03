@@ -39,8 +39,13 @@ const Home = () => {
                 ) : (
                     articles.map(article => (
                         <div key={article.id} className="col-12 md:col-4 lg:col-3">
-                            <Card title={article.title} subTitle={`Price: ${article.price} TND`}>
-                                <img src={article.imageUrl} alt={article.title} className="w-full h-40 object-cover" />
+                            <Card title={article.titre} subTitle={`Price: ${article.prix} TND`}>
+                                {/* Check if image is available or use a placeholder */}
+                                <img 
+                                    src={article.image || 'path/to/placeholder-image.jpg'} 
+                                    alt={article.titre} 
+                                    className="w-full h-40 object-cover" 
+                                />
                                 <Button label="View Details" icon="pi pi-search" className="mt-2" />
                             </Card>
                         </div>

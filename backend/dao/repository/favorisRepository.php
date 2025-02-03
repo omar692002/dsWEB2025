@@ -25,7 +25,13 @@ class FavoriRepository {
     public function getFavorisByUtilisateur(int $utilisateur_id): array {
         $stmt = $this->pdo->prepare("SELECT * FROM favoris WHERE utilisateur_id = ?");
         $stmt->execute([$utilisateur_id]);
-        $favoris = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $favorisArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Convert each row to a Favori object
+        $favoris = [];
+        foreach ($favorisArray as $row) {
+            $favoris[] = new Favori($row);  // Create Favori object for each row
+        }
         
         return $favoris;
     }

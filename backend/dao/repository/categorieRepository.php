@@ -12,13 +12,18 @@ class CategorieRepository {
     // Récupérer toutes les catégories
     public function getAll(): array {
         $stmt = $this->pdo->query("SELECT * FROM categories");
-        return $stmt->fetchAll(PDO::FETCH_CLASS, "Categorie");
+        $categoriesArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Use array_map to create an array of Categorie objects directly
+        return array_map(fn($row) => new Categorie($row), $categoriesArray);
     }
 
     // Récupérer une catégorie par ID
     public function getById(int $id): ?Categorie {
         $stmt = $this->pdo->prepare("SELECT * FROM categories WHERE id = ?");
         $stmt->execute([$id]);
+        
+        // Return Categorie object or null if not found
         return $stmt->fetchObject("Categorie") ?: null;
     }
 

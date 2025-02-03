@@ -9,8 +9,13 @@ class ArticleService {
     }
 
     public function getAllArticles(): array {
-        return $this->articleRepository->getAll();
+        $articles = $this->articleRepository->getAll();
+        
+        error_log("Fetched articles: " . print_r($articles, true)); // Log the fetched data
+    
+        return $articles;
     }
+    
 
     public function getArticleById($id): ?Article {
         return $this->articleRepository->getById($id);
