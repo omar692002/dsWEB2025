@@ -1,0 +1,61 @@
+.articles-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border-radius: 5%;
+}
+
+.article-card {
+    flex: 1 1 calc(20% - 1em); /* Five cards per row */
+    box-sizing: border-box;
+    margin: 0.5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.article-image img {
+    width: auto;
+
+    height: 200px; /* Set a fixed height */
+}
+
+.article-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 200px;
+}
+
+.article-title {
+    margin: 0.5em 0;
+}
+.article-description {
+    flex-grow: 1;
+    overflow: hidden;  /* Prevents content from overflowing */
+    text-overflow: ellipsis; /* Adds "..." when the text is too long */
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Limits text to 3 lines */
+    -webkit-box-orient: vertical;
+    word-wrap: break-word; /* Ensures long words break instead of overflowing */
+}
+
+
+.article-footer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    margin-top: 1em;
+}
+
+.article-header {
+    display: flex;
+    justify-content: end;
+    align-items: flex-end;
+    margin-bottom: 1em;
+}
+
+.article-button {
+    width: 50%;
+}

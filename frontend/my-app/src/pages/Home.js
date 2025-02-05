@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import Navbar from '../components/Navbar';
+import './Home.css';
 
 const Home = () => {
     const [articles, setArticles] = useState([]);
@@ -22,33 +23,37 @@ const Home = () => {
             });
     }, []);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>{error}</div>;
-    }
+    if (loading) return <div className="loading">Loading...</div>;
+    if (error) return <div className="error">{error}</div>;
 
     return (
         <div>
             <Navbar />
-            <div className="grid p-4">
+            <div className="articles-container">
                 {articles.length === 0 ? (
-                    <div>No articles available.</div>
+                    <div className="no-articles">No articles available.</div>
                 ) : (
                     articles.map(article => (
-                        <div key={article.id} className="col-12 md:col-4 lg:col-3">
-                            <Card title={article.titre} subTitle={`Price: ${article.prix} TND`}>
-                                {/* Check if image is available or use a placeholder */}
+                        <Card key={article.id} className="article-card">
+                            <div className="article-header">
+                            <Button icon="pi pi-heart" rounded text severity="help" aria-label="Favorite" />
+
+                            </div>
+                            <div className="article-image">
                                 <img 
                                     src={article.image || 'path/to/placeholder-image.jpg'} 
                                     alt={article.titre} 
-                                    className="w-full h-40 object-cover" 
                                 />
-                                <Button label="View Details" icon="pi pi-search" className="mt-2" />
-                            </Card>
-                        </div>
+                            </div>
+                            <div className="article-content">
+                                <h3 className="article-title">{article.titre}</h3>
+                                <p className="article-description">{article.description || 'No description available.'}</p>
+                            </div>
+                            <div className="article-footer">
+                                <Button label="Voir détails" icon="pi pi-search" className="p-button-sm article-button" />
+                                
+                            </div>
+                        </Card>
                     ))
                 )}
             </div>

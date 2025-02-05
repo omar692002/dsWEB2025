@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../entities/Utilisateur.php';
+require_once __DIR__ . '/../utilisateurDAO.php';
 require_once __DIR__ . '/../../config/db.php';
 
 class UtilisateurRepository {

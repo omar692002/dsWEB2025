@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../entities/Favori.php';
+require_once __DIR__ . '/../favorisDAO.php';
 require_once __DIR__ . '/../../config/db.php';
 
 class FavoriRepository {
