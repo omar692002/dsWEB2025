@@ -12,8 +12,6 @@ class ArticleRepository {
     public function getAll(): array {
         $stmt = $this->pdo->query("SELECT * FROM articles");
         $articlesArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // Using the Article constructor directly to build each article
         return array_map(fn($row) => new Article($row), $articlesArray);
     }
 
@@ -21,7 +19,6 @@ class ArticleRepository {
         $stmt = $this->pdo->prepare("SELECT * FROM articles WHERE id = ?");
         $stmt->execute([$id]);
         
-        // Return an Article object or null if not found
         return $stmt->fetchObject("Article") ?: null;
     }
 

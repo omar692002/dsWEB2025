@@ -9,7 +9,6 @@ class CategorieController {
         $this->categorieService = new CategorieService();
     }
 
-    // Afficher toutes les catégories
     public function all() {
         $categories = $this->categorieService->getAll();
         foreach ($categories as $categorie) {
@@ -21,8 +20,8 @@ class CategorieController {
     public function add() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $nom = $_POST['nom'];
-
-            $categorie = new Categorie(0, $nom);
+            $tab=["nom"=>$nom];
+            $categorie = new Categorie($tab);
             if ($this->categorieService->create($categorie)) {
                 echo "Catégorie ajoutée avec succès";
             } else {
@@ -31,13 +30,12 @@ class CategorieController {
         }
     }
 
-    // Modifier une catégorie
     public function update() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $id = $_POST['id'];
             $nom = $_POST['nom'];
-
-            $categorie = new Categorie($id, $nom);
+            $tab = ["id" => $id, "nom" => $nom];
+            $categorie = new Categorie($tab);
             if ($this->categorieService->update($categorie)) {
                 echo "Catégorie mise à jour avec succès";
             } else {

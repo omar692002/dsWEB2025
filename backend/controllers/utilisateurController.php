@@ -9,15 +9,14 @@ class UtilisateurController {
         $this->utilisateurService = new UtilisateurService();
     }
 
-    // Inscription d'un utilisateur
     public function inscrire() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $nom = $_POST['nom'];
             $email = $_POST['email'];
-            $mot_de_passe = $_POST['mot_de_passe'];
+            $password = $_POST['password'];
             $role = 'user';  // Par défaut, l'utilisateur est un 'user'
-
-            $utilisateur = new Utilisateur(0, $nom, $email, $mot_de_passe, $role);
+            $tab=["nom"=>$nom,"email"=> $email,"password"=> $password, "role"=>$role];
+            $utilisateur = new Utilisateur($tab) ;
             if ($this->utilisateurService->create($utilisateur)) {
                 echo "Utilisateur créé avec succès";
             } else {
@@ -26,17 +25,15 @@ class UtilisateurController {
         }
     }
 
-    // Connexion d'un utilisateur
     public function connexion() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $email = $_POST['email'];
-            $mot_de_passe = $_POST['mot_de_passe'];
+            $password = $_POST['password'];
 
             $utilisateur = $this->utilisateurService->getByEmail($email);
 
-            if ($utilisateur && password_verify($mot_de_passe, $utilisateur->mot_de_passe)) {
+            if ($utilisateur && password_verify($password, $utilisateur->password)) {
                 echo "Connexion réussie";
-                // Ici, tu pourrais créer une session pour l'utilisateur
             } else {
                 echo "Email ou mot de passe incorrect";
             }
@@ -49,10 +46,11 @@ class UtilisateurController {
             $id = $_POST['id'];
             $nom = $_POST['nom'];
             $email = $_POST['email'];
-            $mot_de_passe = $_POST['mot_de_passe'];
+            $password = $_POST['password'];
             $role = $_POST['role'];
+            $tab=["nom"=>$nom,"email"=> $email,"password"=> $password, "role"=>$role];
 
-            $utilisateur = new Utilisateur($id, $nom, $email, $mot_de_passe, $role);
+            $utilisateur = new Utilisateur($tab);
             if ($this->utilisateurService->update($utilisateur)) {
                 echo "Utilisateur mis à jour avec succès";
             } else {

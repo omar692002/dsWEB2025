@@ -13,24 +13,26 @@ class CategorieRepository {
     public function getAll(): array {
         $stmt = $this->pdo->query("SELECT * FROM categories");
         $categoriesArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
-        // Use array_map to create an array of Categorie objects directly
         return array_map(fn($row) => new Categorie($row), $categoriesArray);
     }
 
-    // Récupérer une catégorie par ID
     public function getById(int $id): ?Categorie {
         $stmt = $this->pdo->prepare("SELECT * FROM categories WHERE id = ?");
         $stmt->execute([$id]);
-        
-        // Return Categorie object or null if not found
         return $stmt->fetchObject("Categorie") ?: null;
     }
 
-    // Ajouter une nouvelle catégorie
     public function create(Categorie $categorie): bool {
-        $stmt = $this->pdo->prepare("INSERT INTO categories (nom) VALUES (?)");
-        return $stmt->execute([$categorie->nom]);
+        if($categorie->idParent != null)
+        {
+            $stmt = $this->pdo->prepare("INSERT INTO categories (nom,parent_id) VALUES (?,?)");
+            return $stmt->execute([$categorie->nom , $categorie->idParent]);
+        }else
+        {
+            $stmt = $this->pdo->prepare("INSERT INTO categories (nom) VALUES (?)");
+            return $stmt->execute([$categorie->nom]);
+        }
+       
     }
 
     // Modifier une catégorie existante

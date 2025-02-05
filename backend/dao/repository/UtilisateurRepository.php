@@ -11,46 +11,43 @@ class UtilisateurRepository {
 
     // Récupérer un utilisateur par ID
     public function getById(int $id): ?Utilisateur {
-        $stmt = $this->pdo->prepare("SELECT * FROM utilisateurs WHERE id = ?");
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id = ?");
         $stmt->execute([$id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row ? new Utilisateur($row) : null; // Create Utilisateur object from row
+        return $row ? new Utilisateur($row) : null; 
     }
 
-    // Récupérer un utilisateur par email
     public function getByEmail(string $email): ?Utilisateur {
-        $stmt = $this->pdo->prepare("SELECT * FROM utilisateurs WHERE email = ?");
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = ?");
         $stmt->execute([$email]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row ? new Utilisateur($row) : null; // Create Utilisateur object from row
+        return $row ? new Utilisateur($row) : null; 
     }
 
-    // Récupérer un utilisateur par email et rôle
     public function getByEmailAndRole(string $email, string $role): ?Utilisateur {
-        $stmt = $this->pdo->prepare("SELECT * FROM utilisateurs WHERE email = ? AND role = ?");
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = ? AND role = ?");
         $stmt->execute([$email, $role]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row ? new Utilisateur($row) : null; // Create Utilisateur object from row
+        return $row ? new Utilisateur($row) : null; 
     }
 
-    // Ajouter un utilisateur
     public function create(Utilisateur $utilisateur): bool {
-        $stmt = $this->pdo->prepare("INSERT INTO utilisateurs (nom, email, mot_de_passe, role) VALUES (?, ?, ?, ?)");
+        $stmt = $this->pdo->prepare("INSERT INTO users (nom, email, password, role) VALUES (?, ?, ?, ?)");
         return $stmt->execute([
             $utilisateur->nom, 
             $utilisateur->email, 
-            password_hash($utilisateur->mot_de_passe, PASSWORD_DEFAULT), 
+            password_hash($utilisateur->password, PASSWORD_DEFAULT), 
             $utilisateur->role
         ]);
     }
 
     // Modifier un utilisateur existant
     public function update(Utilisateur $utilisateur): bool {
-        $stmt = $this->pdo->prepare("UPDATE utilisateurs SET nom = ?, email = ?, mot_de_passe = ?, role = ? WHERE id = ?");
+        $stmt = $this->pdo->prepare("UPDATE utilisateurs SET nom = ?, email = ?, password = ?, role = ? WHERE id = ?");
         return $stmt->execute([
             $utilisateur->nom, 
             $utilisateur->email, 
-            $utilisateur->mot_de_passe, 
+            $utilisateur->password, 
             $utilisateur->role, 
             $utilisateur->id
         ]);
