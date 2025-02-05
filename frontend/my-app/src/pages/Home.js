@@ -1,29 +1,62 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Card } from 'primereact/card';
-import { Button } from 'primereact/button';
-import Navbar from '../components/Navbar';
-import { Dialog } from 'primereact/dialog';
-import './Home.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Navbar from "../components/Navbar";
+import ArticleDetails from "../components/ArticleDetails";
+import ArticleCard from "../components/ArticleCard";
+import Filters from "../components/Filters"; 
+import "./Home.css";
 
 const Home = () => {
     const [articles, setArticles] = useState([]);
+    const [filteredArticles, setFilteredArticles] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+    const [error, setError] = useState("");
     const [selectedArticle, setSelectedArticle] = useState(null);
-
+    const [selectedFilter, setSelectedFilter] = useState("all");
+    const [categories, setCategories]=useState([
+        { id: 1, nom: "Electronics" },
+        { id: 2, nom: "Clothing" },
+        { id: 3, nom: "Books" },
+        {id: 4, nom: "Books"},
+        {id: 5, nom: "Books"},    ]);
+    // useEffect(()=>{
+    //     axios.get("http://localhost:8081/DS/dsWEB2025/backend/controllers/categorieController.php")
+    //     .then(response=>{
+    //         setCategories(response.data)
+    //     }).catch(error=>{  
+    //         console.error("Error fetching categories:", error);
+    //         setError("Failed to fetch categories.");
+    //         setLoading(false);})
+    // })
     useEffect(() => {
-        axios.get('http://localhost:8081/DS/dsWEB2025/backend/controllers/articleController.php')
+        axios.get("http://localhost:8081/DS/dsWEB2025/backend/controllers/articleController.php")
             .then(response => {
                 setArticles(response.data);
+                setFilteredArticles(response.data);
                 setLoading(false);
             })
             .catch(error => {
-                console.error('Error fetching articles:', error);
-                setError('Failed to fetch articles.');
+                console.error("Error fetching articles:", error);
+                setError("Failed to fetch articles.");
                 setLoading(false);
             });
     }, []);
+    
+    useEffect(() => {
+        let updatedArticles = [...articles];        
+        if (selectedFilter === "price") {
+            updatedArticles.sort((a, b) => a.prix - b.prix);
+        } else if (selectedFilter === "date") {
+            updatedArticles.sort((a, b) => new Date(b.date_ajout
+            ) - new Date(a.date_ajout
+            ));
+        } else if (selectedFilter === "category") {
+            updatedArticles = articles.filter(article => article.categorie_id
+            );            
+        } 
+
+        setFilteredArticles(updatedArticles);
+    }, [selectedFilter, articles]);
 
     if (loading) return <div className="loading">Loading...</div>;
     if (error) return <div className="error">{error}</div>;
@@ -31,66 +64,11 @@ const Home = () => {
     return (
         <div>
             <Navbar />
-            <div className="articles-container">
-                {articles.length === 0 ? (
-                    <div className="no-articles">No articles available.</div>
-                ) : (
-                    articles.map(article => (
-                        <Card key={article.id} className="article-card">
-                            <div className="article-header">
-                                <Button icon="pi pi-heart" rounded text severity="help" aria-label="Favorite" />
-                            </div>
-                            <div className="article-image">
-                                <img 
-                                    src={article.image || 'path/to/placeholder-image.jpg'} 
-                                    alt={article.titre} 
-                                />
-                            </div>
-                            <div className="article-content">
-                                <h3 className="article-title">{article.titre}</h3>
-                                <p className="article-description">{article.description || 'No description available.'}</p>
-                                <p>{article.prix} TND</p>
-                            </div>
-                            <div className="article-footer">
-                                <Button 
-                                    label="View details" 
-                                    icon="pi pi-search" 
-                                    className="p-button-sm article-button" 
-                                    onClick={() => setSelectedArticle(article)}
-                                />
-                            </div>
-                        </Card>
-                    ))
-                )}
-            </div>
-
+            <Filters selectedFilter={selectedFilter} setSelectedFilter={setSelectedFilter} />
+            <ArticleCard filteredArticles={filteredArticles} setSelectedArticle={setSelectedArticle} selectedFilter={selectedFilter} categories={categories}></ArticleCard>
             {selectedArticle && (
-                <Dialog 
-                header={selectedArticle.titre} 
-                visible={!!selectedArticle} 
-                style={{ width: '50vw' }} 
-                onHide={() => setSelectedArticle(null)}
-            >
-                <div className="dialog-content">
-                    {/* Left: Image Section */}
-                    <div className="dialog-image-container">
-                        <img 
-                            src={selectedArticle.image || 'path/to/placeholder-image.jpg'} 
-                            alt={selectedArticle.titre} 
-                            className="dialog-image"
-                        />
-                    </div>
-            
-                    {/* Right: Product Details */}
-                    <div className="dialog-details">
-                        <h2>{selectedArticle.titre}</h2>
-                        <p><strong>Description:</strong> {selectedArticle.description || 'No description available.'}</p>
-                        <p><strong>Price:</strong> {selectedArticle.prix ? `${selectedArticle.prix} TND` : 'N/A'}</p>
-                        <p><strong>Category:</strong> {selectedArticle.category || 'Uncategorized'}</p>
-                    </div>
-                </div>
-            </Dialog>
-            
+                <ArticleDetails header={selectedArticle.titre} visible={!!selectedArticle} selectedArticle={selectedArticle} setSelectedArticle={setSelectedArticle}>
+                    </ArticleDetails>
             )}
         </div>
     );
