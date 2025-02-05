@@ -58,4 +58,27 @@
 
 .article-button {
     width: 50%;
+    border-radius:6px;
+    background-color: darkslategrey;
+}
+.dialog-content {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Space between image and text */
+}
+
+.dialog-image-container {
+    flex: 1;
+    max-width: 40%;
+}
+
+.dialog-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.dialog-details {
+    flex: 2;
+    text-align: left;
 }

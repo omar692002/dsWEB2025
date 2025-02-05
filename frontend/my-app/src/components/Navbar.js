@@ -12,7 +12,7 @@ const Navbar = () => {
     ];
     
     const start = <img alt="" src="" height="40" className="mr-2" />;
-    const end = <Button label="Login" icon="pi pi-user" onClick={() => navigate('/login')} />;
+    const end = <Button style={{ backgroundColor: 'darkslategrey' }} label="Login" icon="pi pi-user" onClick={() => navigate('/login')} />;
     
     return <Menubar model={items} start={start} end={end} />;
 };
