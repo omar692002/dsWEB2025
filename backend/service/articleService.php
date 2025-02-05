@@ -22,13 +22,7 @@ class ArticleService {
     }
 
     public function addArticle($data): bool {
-        $article = new Article();
-        $article->titre = $data['titre'];
-        $article->description = $data['description'];
-        $article->prix = $data['prix'];
-        $article->image = $data['image'] ?? null;
-        $article->categorie_id = $data['categorie_id'];
-
+        $article = new Article($data);
         return $this->articleRepository->create($article);
     }
 
