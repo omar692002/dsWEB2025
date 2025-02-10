@@ -1,32 +1,31 @@
 <?php
-require_once __DIR__ . '/../dao/repository/UtilisateurRepository.php';
-require_once __DIR__ . '/../dao/utilisateurDAO.php';
+require_once __DIR__ . '/../dao/repository/utilisateurRepository.php';
 
 class UtilisateurService {
-    private $utilisateurRepo;
+    private $utilisateurRepository;
 
     public function __construct() {
-        $this->utilisateurRepo = new UtilisateurRepository();
+        $this->utilisateurRepository = new UtilisateurRepository();
     }
 
-    public function create(Utilisateur $utilisateur): bool {
-        return $this->utilisateurRepo->create($utilisateur);
+    public function getAllUsers(): array {
+        $users = $this->utilisateurRepository->getAll();
+        
+        error_log("Fetched users: " . print_r($users, true)); // Log the fetched data
+    
+        return $users;
+    }
+    
+
+    public function getUserById($id): ?Utilisateur {
+        return $this->utilisateurRepository->getById($id);
     }
 
-    public function getByEmail(string $email): ?Utilisateur {
-        return $this->utilisateurRepo->getByEmail($email);
+    public function addUser($data): bool {
+        $user = new Utilisateur($data);
+        return $this->utilisateurRepository->create($user);
     }
 
-    public function getByEmailAndRole(string $email, string $role): ?Utilisateur {
-        return $this->utilisateurRepo->getByEmailAndRole($email, $role);
-    }
 
-    public function update(Utilisateur $utilisateur): bool {
-        return $this->utilisateurRepo->update($utilisateur);
-    }
-
-    public function delete(int $id): bool {
-        return $this->utilisateurRepo->delete($id);
-    }
 }
 ?>
