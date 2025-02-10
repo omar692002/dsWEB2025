@@ -13,6 +13,9 @@ class CategorieService {
     public function getAll(): array {
         return $this->categorieRepo->getAll();
     }
+    public function getCategorieById($id): Categorie {
+        return $this->categorieRepo->getById($id);
+    }
 
     // Créer une nouvelle catégorie
     public function create(Categorie $categorie): bool {

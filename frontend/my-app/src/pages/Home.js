@@ -13,20 +13,19 @@ const Home = () => {
     const [error, setError] = useState("");
     const [selectedArticle, setSelectedArticle] = useState(null);
     const [selectedFilter, setSelectedFilter] = useState("all");
-    const [categories, setCategories]=useState(null);
-    useEffect(()=>{
-        axios.get("http://localhost:8081/DS/dsWEB2025/backend/controllers/categorieController.php")
-        .then(response=>{
-            setCategories(response.data)
-        }).catch(error=>{  
-            console.error("Error fetching categories:", error);
-            setError("Failed to fetch categories.");
-            setLoading(false);})
-    })
-    console.log(categories)
+    const [categories,setCategories]=useState(null);
     
+            useEffect(()=>{
+                axios.get(process.env.REACT_APP_BACKEND_URL+"/controllers/categorieController.php")
+                .then(response=>{
+                    setCategories(response.data)
+                }).catch(error=>{  
+                    console.error("Error fetching categories:", error);
+                    setError("Failed to fetch categories.");
+                    setLoading(false);})
+            });
     useEffect(() => {
-        axios.get("http://localhost:8081/DS/dsWEB2025/backend/controllers/articleController.php")
+        axios.get(process.env.REACT_APP_BACKEND_URL+"/controllers/articleController.php")
             .then(response => {
                 setArticles(response.data);
                 setFilteredArticles(response.data);
