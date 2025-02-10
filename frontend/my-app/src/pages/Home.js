@@ -19,11 +19,14 @@ const Home = () => {
                 axios.get(process.env.REACT_APP_BACKEND_URL+"/controllers/categorieController.php")
                 .then(response=>{
                     setCategories(response.data)
+                    console.log(response.data);
+                    
                 }).catch(error=>{  
                     console.error("Error fetching categories:", error);
                     setError("Failed to fetch categories.");
                     setLoading(false);})
-            });
+           
+        }, []);
     useEffect(() => {
         axios.get(process.env.REACT_APP_BACKEND_URL+"/controllers/articleController.php")
             .then(response => {
