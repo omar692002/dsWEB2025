@@ -14,7 +14,7 @@ const Home = () => {
     const [selectedArticle, setSelectedArticle] = useState(null);
     const [selectedFilter, setSelectedFilter] = useState("all");
     const [categories,setCategories]=useState(null);
-    
+    const [searchQuery, setSearchQuery] = useState("");
             useEffect(()=>{
                 axios.get(process.env.REACT_APP_BACKEND_URL+"/controllers/categorieController.php")
                 .then(response=>{
@@ -42,7 +42,12 @@ const Home = () => {
     }, []);
     
     useEffect(() => {
-        let updatedArticles = [...articles];        
+        let updatedArticles = [...articles];  
+        if (searchQuery) {
+            updatedArticles = updatedArticles.filter(article =>
+                article.titre.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        }
         if (selectedFilter === "price") {
             updatedArticles.sort((a, b) => a.prix - b.prix);
         } else if (selectedFilter === "date") {
@@ -55,14 +60,14 @@ const Home = () => {
         } 
 
         setFilteredArticles(updatedArticles);
-    }, [selectedFilter, articles]);
+    }, [selectedFilter, articles,searchQuery]);
 
     if (loading) return <div className="loading">Loading...</div>;
     if (error) return <div className="error">{error}</div>;
 
     return (
         <div>
-            <Navbar />
+            <Navbar setSearchQuery={setSearchQuery} />
             <Filters selectedFilter={selectedFilter} setSelectedFilter={setSelectedFilter} />
             <ArticleCard filteredArticles={filteredArticles} setSelectedArticle={setSelectedArticle} selectedFilter={selectedFilter} categories={categories}></ArticleCard>
             {selectedArticle && (
