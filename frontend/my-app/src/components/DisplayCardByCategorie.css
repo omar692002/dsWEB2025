@@ -1,0 +1,25 @@
+.category-container {
+    margin-top: 2rem;
+        
+}
+
+.category-section {
+    margin-bottom: 2rem;
+}
+
+.category-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.category-articles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.article-card {
+    width: 250px;
+    margin: 10px;
+}
