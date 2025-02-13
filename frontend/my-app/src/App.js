@@ -1,6 +1,5 @@
 import React from 'react';
 import AppRoutes from './routes/AppRoutes';
-import { PrimeReactProvider } from 'primereact/api';
 
 function App() {
   return (

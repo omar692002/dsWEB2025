@@ -1,41 +1,53 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Navbar from "../components/Navbar";
 import ArticleDetails from "../components/ArticleDetails";
 import Filters from "../components/Filters"; 
 import "./Home.css";
 import Articles from "../components/ArticleCard";
+import { InputIcon } from 'primereact/inputicon';
+import { IconField } from 'primereact/iconfield';
+import { InputText } from 'primereact/inputtext';
 
 const Home = () => {
     const [articles, setArticles] = useState([]);
-    const [filteredArticles, setFilteredArticles] = useState([]);
+    const [articlesWithoutFilter, setArticlesWithoutFilter] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [selectedArticle, setSelectedArticle] = useState(null);
     const [selectedFilter, setSelectedFilter] = useState("all");
     const [categories,setCategories]=useState(null);
+    const [sousCategories,setSousCategories]=useState(null);
+
     const [searchQuery, setSearchQuery] = useState("");
-            useEffect(()=>{
+
+    useEffect(()=>{
                 axios.get(process.env.REACT_APP_BACKEND_URL+"/controllers/categorieController.php")
                 .then(response=>{
                     setCategories(response.data)
-                    console.log(response.data);
                     
                 }).catch(error=>{  
-                    console.error("Error fetching categories:", error);
                     setError("Failed to fetch categories.");
                     setLoading(false);})
            
         }, []);
+        useEffect(()=>{
+            axios.get(process.env.REACT_APP_BACKEND_URL+"/controllers/sousCategorieController.php")
+            .then(response=>{
+                setSousCategories(response.data)
+                
+            }).catch(error=>{  
+                setError("Failed to fetch sous categories.");
+                setLoading(false);})
+       
+    }, []);
     useEffect(() => {
         axios.get(process.env.REACT_APP_BACKEND_URL+"/controllers/articleController.php")
             .then(response => {
                 setArticles(response.data);
-                setFilteredArticles(response.data);
+                setArticlesWithoutFilter(response.data);
                 setLoading(false);
             })
             .catch(error => {
-                console.error("Error fetching articles:", error);
                 setError("Failed to fetch articles.");
                 setLoading(false);
             });
@@ -59,21 +71,31 @@ const Home = () => {
             );            
         } 
 
-        setFilteredArticles(updatedArticles);
+        setArticlesWithoutFilter(updatedArticles);
     }, [selectedFilter, articles,searchQuery]);
 
-    if (loading) return <div className="loading">Loading...</div>;
-    if (error) return <div className="error">{error}</div>;
+
+    const handleSearchQuery=(e)=>{
+        setSearchQuery(e.target.value)
+
+    }
 
     return (
         <div>
-            <Navbar setSearchQuery={setSearchQuery} />
-            <Filters selectedFilter={selectedFilter} setSelectedFilter={setSelectedFilter} />
-            <Articles filteredArticles={filteredArticles} setSelectedArticle={setSelectedArticle} selectedFilter={selectedFilter} categories={categories}></Articles>
+          <div style={{ display: "flex", justifyContent: "end", marginTop: "10px", marginRight: "10px" }}>
+                <IconField iconPosition="left" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <InputIcon className="pi pi-search" />
+                    <InputText placeholder="Search" onChange={handleSearchQuery} />
+                    <Filters selectedFilter={selectedFilter} setSelectedFilter={setSelectedFilter} />
+                </IconField>
+            </div>
+
+            <Articles articlesWithoutFilter={articlesWithoutFilter} setSelectedArticle={setSelectedArticle} selectedFilter={selectedFilter} categories={categories} sousCategories={sousCategories}></Articles>
             {selectedArticle && (
                 <ArticleDetails header={selectedArticle.titre} visible={!!selectedArticle} selectedArticle={selectedArticle} setSelectedArticle={setSelectedArticle}>
                     </ArticleDetails>
             )}
+        
         </div>
     );
 };

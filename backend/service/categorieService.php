@@ -22,14 +22,8 @@ class CategorieService {
         return $this->categorieRepo->create($categorie);
     }
 
-    // Modifier une catégorie
     public function update(Categorie $categorie): bool {
         return $this->categorieRepo->update($categorie);
-    }
-
-    // Supprimer une catégorie
-    public function delete(int $id): bool {
-        return $this->categorieRepo->delete($id);
     }
 }
 ?>

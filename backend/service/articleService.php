@@ -34,7 +34,7 @@ class ArticleService {
         $article->description = $data['description'];
         $article->prix = $data['prix'];
         $article->image = $data['image'] ?? null;
-        $article->categorie_id = $data['categorie_id'];
+        $article->sous_categorie_id = $data['sous_categorie_id'];
 
         return $this->articleRepository->update($article);
     }

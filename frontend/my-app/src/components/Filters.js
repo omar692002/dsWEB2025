@@ -7,6 +7,7 @@ const Filters = ({ selectedFilter, setSelectedFilter, selectedSort, setSelectedS
     const filterOptions = [
         { label: "All", value: "all" },
         { label: "Category", value: "category" },
+        { label: "sousCategory", value: "sousCategory" },
         { label: "Date Added", value: "date" },
         { label: "Price (Ascending)", value: "price" },
     ];
@@ -20,14 +21,7 @@ const Filters = ({ selectedFilter, setSelectedFilter, selectedSort, setSelectedS
                 placeholder="Filter by"
                 className="filter-dropdown"
             />
-            <Button 
-                label="Reset" 
-                icon="pi pi-refresh" 
-                className="p-button-secondary reset-button"
-                onClick={() => {
-                    setSelectedFilter("all");
-                }} 
-            />
+           
         </div>
     );
 };

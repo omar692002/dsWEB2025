@@ -14,7 +14,7 @@ class Article {
     public string $description;
     public float $prix;
     public ?string $image;
-    public int $categorie_id;
+    public int $sous_categorie_id;
     public string $date_ajout;
 
     public function __construct(array $data) {
@@ -23,7 +23,7 @@ class Article {
         $this->description = $data['description'];
         $this->prix = (float) $data['prix'];
         $this->image = $data['image'] ?? null;
-        $this->categorie_id = (int) $data['categorie_id'];
+        $this->sous_categorie_id = (int) $data['sous_categorie_id'];
         $this->date_ajout = $data['date_ajout'];
     }
 }

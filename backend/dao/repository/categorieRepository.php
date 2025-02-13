@@ -23,11 +23,6 @@ class CategorieRepository {
     }
 
     public function create(Categorie $categorie): bool {
-        if($categorie->idParent != null)
-        {
-            $stmt = $this->pdo->prepare("INSERT INTO categories (nom,parent_id) VALUES (?,?)");
-            return $stmt->execute([$categorie->nom , $categorie->idParent]);
-        }else
         {
             $stmt = $this->pdo->prepare("INSERT INTO categories (nom) VALUES (?)");
             return $stmt->execute([$categorie->nom]);
@@ -35,16 +30,14 @@ class CategorieRepository {
        
     }
 
-    // Modifier une catégorie existante
     public function update(Categorie $categorie): bool {
         $stmt = $this->pdo->prepare("UPDATE categories SET nom = ? WHERE id = ?");
         return $stmt->execute([$categorie->nom, $categorie->id]);
     }
 
-    // Supprimer une catégorie
-    public function delete(int $id): bool {
-        $stmt = $this->pdo->prepare("DELETE FROM categories WHERE id = ?");
-        return $stmt->execute([$id]);
-    }
+    // public function delete(int $id): bool {
+    //     $stmt = $this->pdo->prepare("DELETE FROM categories WHERE id = ?");
+    //     return $stmt->execute([$id]);
+    // }
 }
 ?>

@@ -1,9 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { Card } from 'primereact/card';
-import { Button } from 'primereact/button';
-import Navbar from '../components/Navbar';
 import { Dialog } from "primereact/dialog";
 
 const ArticleDetails = ({ header, visible, selectedArticle, setSelectedArticle }) => {

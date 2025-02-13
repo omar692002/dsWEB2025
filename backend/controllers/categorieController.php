@@ -28,9 +28,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
         updateCategorie();
         break;
 
-    case 'DELETE':
-        deleteCategorie();
-        break;
+    // case 'DELETE':
+    //     deleteCategorie();
+    //     break;
 
     case 'OPTIONS': // Préflight request (utile pour certaines requêtes CORS)
         http_response_code(200);
@@ -75,7 +75,6 @@ function createCategorie() {
     }
 }
 
-// Fonction pour mettre à jour une catégorie
 function updateCategorie() {
     global $categorieService;
 
@@ -95,21 +94,21 @@ function updateCategorie() {
     }
 }
 
-// Fonction pour supprimer une catégorie
-function deleteCategorie() {
-    global $categorieService;
+// // Fonction pour supprimer une catégorie
+// function deleteCategorie() {
+//     global $categorieService;
 
-    // Récupération des données envoyées en DELETE
-    parse_str(file_get_contents("php://input"), $input);
+//     // Récupération des données envoyées en DELETE
+//     parse_str(file_get_contents("php://input"), $input);
     
-    if (!isset($input['id'])) {
-        echo json_encode(["error" => "ID de la catégorie manquant"]);
-        return;
-    }
+//     if (!isset($input['id'])) {
+//         echo json_encode(["error" => "ID de la catégorie manquant"]);
+//         return;
+//     }
 
-    if ($categorieService->delete($input['id'])) {
-        echo json_encode(["message" => "Catégorie supprimée avec succès"]);
-    } else {
-        echo json_encode(["error" => "Erreur lors de la suppression de la catégorie"]);
-    }
-}
+//     if ($categorieService->delete($input['id'])) {
+//         echo json_encode(["message" => "Catégorie supprimée avec succès"]);
+//     } else {
+//         echo json_encode(["error" => "Erreur lors de la suppression de la catégorie"]);
+//     }
+// }

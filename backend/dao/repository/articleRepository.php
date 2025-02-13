@@ -23,24 +23,24 @@ class ArticleRepository {
     }
 
     public function create(Article $article): bool {
-        $stmt = $this->pdo->prepare("INSERT INTO articles (titre, description, prix, image, categorie_id) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $this->pdo->prepare("INSERT INTO articles (titre, description, prix, image, sous_categorie_id) VALUES (?, ?, ?, ?, ?)");
         return $stmt->execute([
             $article->titre, 
             $article->description, 
             $article->prix, 
             $article->image, 
-            $article->categorie_id
+            $article->sous_categorie_id
         ]);
     }
 
     public function update(Article $article): bool {
-        $stmt = $this->pdo->prepare("UPDATE articles SET titre = ?, description = ?, prix = ?, image = ?, categorie_id = ? WHERE id = ?");
+        $stmt = $this->pdo->prepare("UPDATE articles SET titre = ?, description = ?, prix = ?, image = ?, sous_categorie_id = ? WHERE id = ?");
         return $stmt->execute([
             $article->titre, 
             $article->description, 
             $article->prix, 
             $article->image, 
-            $article->categorie_id, 
+            $article->sous_categorie_id, 
             $article->id
         ]);
     }
