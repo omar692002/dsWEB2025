@@ -4,7 +4,7 @@ import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import './DisplayCardByCategorie.css';
 
-const DisplayCardByCategorie = ({ groupedArticles, setSelectedArticle }) => {
+const DisplayCardsByCategorie = ({ groupedArticles, setSelectedArticle }) => {
     return (
         <div className="category-container">
             {Object.entries(groupedArticles).map(([category, articles]) => (
@@ -44,4 +44,4 @@ const DisplayCardByCategorie = ({ groupedArticles, setSelectedArticle }) => {
     );
 };
 
-export default DisplayCardByCategorie;
+export default DisplayCardsByCategorie;

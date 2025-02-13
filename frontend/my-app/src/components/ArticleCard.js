@@ -3,7 +3,7 @@ import { Button } from "primereact/button";
 import { Dialog } from 'primereact/dialog';
 import { useState } from "react";
 import axios from "axios";
-import DisplayCardByCategorie from './DisplayCardByCategorie'; 
+import DisplayCardsByCategorie from './DisplayCardByCategorie'; 
 
 const Articles = ({ filteredArticles, setSelectedArticle, selectedFilter, categories }) => {
     const groupedArticles = filteredArticles.reduce((acc, article) => {
@@ -34,7 +34,7 @@ const Articles = ({ filteredArticles, setSelectedArticle, selectedFilter, catego
     return (
         <div className="articles-container">
             {selectedFilter === "category" ? (
-                <DisplayCardByCategorie 
+                <DisplayCardsByCategorie 
                     groupedArticles={groupedArticles} 
                     setSelectedArticle={setSelectedArticle}
                 />
