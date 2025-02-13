@@ -3,8 +3,6 @@ import { Button } from "primereact/button";
 import { Dialog } from 'primereact/dialog';
 import { useState,useEffect } from "react";
 import axios from "axios";
-import { ArticlesParCategorie } from "./ArticlesParCategorie ";
-import { ArticlesParSousCategorie } from "./ArticlesParSousCategorie";
 
 const Articles = ({ articlesWithoutFilter, setSelectedArticle, selectedFilter, categories, sousCategories }) => {
 
