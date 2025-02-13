@@ -69,7 +69,7 @@ const Home = () => {
         <div>
             <Navbar setSearchQuery={setSearchQuery} />
             <Filters selectedFilter={selectedFilter} setSelectedFilter={setSelectedFilter} />
-            <ArticleCard filteredArticles={filteredArticles} setSelectedArticle={setSelectedArticle} selectedFilter={selectedFilter} categories={categories}></ArticleCard>
+            <Articles filteredArticles={filteredArticles} setSelectedArticle={setSelectedArticle} selectedFilter={selectedFilter} categories={categories}></Articles>
             {selectedArticle && (
                 <ArticleDetails header={selectedArticle.titre} visible={!!selectedArticle} selectedArticle={selectedArticle} setSelectedArticle={setSelectedArticle}>
                     </ArticleDetails>
