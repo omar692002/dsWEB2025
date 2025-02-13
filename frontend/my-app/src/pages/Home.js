@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import ArticleDetails from "../components/ArticleDetails";
-import ArticleCard from "../components/ArticleCard";
 import Filters from "../components/Filters"; 
 import "./Home.css";
+import Articles from "../components/ArticleCard";
 
 const Home = () => {
     const [articles, setArticles] = useState([]);
