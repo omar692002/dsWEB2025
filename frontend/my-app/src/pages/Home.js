@@ -70,7 +70,22 @@ const Home = () => {
         return acc;
     }, {});
 
-    
+    useEffect(() => {
+        let updatedArticles = [...articles];  
+        if (searchQuery) {
+            updatedArticles = updatedArticles.filter(article =>
+                article.titre.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        }
+        if (selectedFilter === "price") {
+            updatedArticles.sort((a, b) => a.prix - b.prix);
+        } else if (selectedFilter === "date") {
+            updatedArticles.sort((a, b) => new Date(b.date_ajout
+            ) - new Date(a.date_ajout
+            ));
+        }
+        setArticlesWithoutFilter(updatedArticles);
+    }, [selectedFilter, articles,searchQuery]);
 
     return (
         <div>
