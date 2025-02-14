@@ -41,7 +41,7 @@ const Articles = ({ groupedByCategoryAndSubCategory, groupedByCategory,articlesW
                 ) : (
                    
                     <div className="container">
-                    <h2>Nos Articles</h2>
+                    <h1 style={{color :"red" , display:"flex", justifyContent:"center"}}>Nos Articles</h1>
                     <div className="cards-container">
                         {articlesWithoutFilter.map((article) => (
                             <div key={article.id} className="card">

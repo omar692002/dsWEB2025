@@ -8,7 +8,7 @@ const GroupedByCategory = ({ groupedByCategory }) => {
         <div className="container">
             {Object.entries(groupedByCategory).map(([category, perfumes]) => (
                 <div key={category} className="category-section">
-                    <h2>{category}</h2>
+                    <h1 style={{color :"red" , display:"flex", justifyContent:"center"}}>{category}</h1>
                     <div className="cards-container">
                         {perfumes.map((perfume) => (
                             <div key={perfume.id} className="card">
