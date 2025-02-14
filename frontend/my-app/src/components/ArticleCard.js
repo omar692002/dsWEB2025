@@ -1,15 +1,16 @@
-import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { Dialog } from 'primereact/dialog';
 import { useState,useEffect } from "react";
 import axios from "axios";
+import GroupedByCategoryAndSubCategory from "./articlesByCategoryAndSubCategory";
+import GroupedByCategory from "./articlesByCategoryOnly";
+import './ArticleCard.css';
 
-const Articles = ({ groupedByCategoryAndSubCategory, groupedByCategory,articlesWithoutFilter, setSelectedArticle, selectedFilter, categories, sousCategories }) => {
+const Articles = ({ groupedByCategoryAndSubCategory, groupedByCategory,articlesWithoutFilter, setSelectedArticle, selectedFilter }) => {
 
     const [visible, setVisible] = useState(false);
     const [articleIdToFavorite, setArticleIdToFavorite] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
-    // Regroupement par catégorie
     
 
     const ajoutAuFavoris = (articleId) => {
@@ -27,118 +28,54 @@ const Articles = ({ groupedByCategoryAndSubCategory, groupedByCategory,articlesW
   
     
 
-
-    // Composant affichant les parfums par catégorie et sous-catégorie
-    const GroupedByCategoryAndSubCategory = () => (
-        <div className="p-5">
-            <h2 className="text-2xl font-bold mb-4">Parfums par Catégorie et Sous-Catégorie</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {Object.entries(groupedByCategoryAndSubCategory).map(([category, subCategories]) => (
-                    <div key={category} className="border p-4 rounded-lg shadow-md">
-                        <h3 className="text-xl font-semibold mb-3">{category}</h3>
-                        {Object.entries(subCategories).map(([subCategory, articles]) => (
-                            <div key={subCategory} className="mt-3">
-                                <h4 className="text-lg font-medium">{subCategory}</h4>
-                                {articles.length > 0 ? (
-                                    <ul className="space-y-2">
-                                        {articles.map(article => (
-                                            <li key={article.id} className="p-2 border-b">
-                                                {article.titre} - {article.prix}€
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ) : (
-                                    <p className="text-gray-500">Aucun parfum disponible.</p>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-    const GroupedByCategory = () => {
-        console.log(groupedByCategory);  // Ajoutons un log pour voir si les données sont bien passées
-        return (
-            <div className="p-5">
-                <h2 className="text-2xl font-bold mb-4">Parfums par Catégorie</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {Object.entries(groupedByCategory).map(([categoryName, items]) => (
-                        <div key={categoryName} className="p-4 border rounded shadow">
-                            <h3 className="text-xl font-semibold mb-3">{categoryName}</h3>
-                            <div className="space-y-4">
-                                {items.map((item, index) => (
-                                    <div key={index} className="border-b pb-2">
-                                        <p className="font-bold">{item.titre}</p>
-                                        <p>{item.description}</p>
-                                        <p className="text-gray-500">{item.prix}€</p>
-                                        {item.image ? (
-                                            <img src={item.image} alt={item.titre} className="w-full h-auto mt-2" />
-                                        ) : (
-                                            <p className="text-gray-400">Image non disponible</p>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        );
-    };
-    
     
     return (
         <div className="articles-container">
             {selectedFilter === "category" ? (
-                <GroupedByCategory />
+                <GroupedByCategory groupedByCategory = {groupedByCategory} />
             ) : selectedFilter === "sousCategory" ? (
-                <GroupedByCategoryAndSubCategory />
+                <GroupedByCategoryAndSubCategory groupedByCategoryAndSubCategory={groupedByCategoryAndSubCategory} />
             ) : (
                 articlesWithoutFilter.length === 0 ? (
                     <div className="no-articles">No articles available.</div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {articlesWithoutFilter.map(article => (
-                            <Card key={article.id} className="article-card border p-4 rounded-lg shadow-md">
+                   
+                    <div className="container">
+                    <h2>Nos Articles</h2>
+                    <div className="cards-container">
+                        {articlesWithoutFilter.map((article) => (
+                            <div key={article.id} className="card">
                                 {loggedIn && (
-                                    <div className="flex justify-end">
-                                        <Button
-                                            icon="pi pi-heart"
-                                            rounded
-                                            text
-                                            severity="help"
-                                            aria-label="Favorite"
+                                    <div className="favorite-btn">
+                                        <button 
                                             onClick={() => {
                                                 setVisible(true);
                                                 setArticleIdToFavorite(article.id);
                                             }}
-                                        />
+                                        >
+                                            ❤️
+                                        </button>
                                     </div>
                                 )}
-                                <div className="article-image flex justify-center">
-                                    <img
-                                        src={article.image || "/images/default-parfum.jpg"}
-                                        alt={article.titre}
-                                        className="w-full h-40 object-cover rounded-lg"
+                                <div className="card-header">
+                                    <img 
+                                        src={article.image || "/images/default-parfum.jpg"} 
+                                        alt={article.titre} 
+                                        className="card-image"
                                     />
                                 </div>
-                                <div className="article-content text-center mt-3">
-                                    <h3 className="text-lg font-semibold">{article.titre}</h3>
-                                    <p className="text-gray-500">{article.description || "No description available."}</p>
-                                    <p className="font-bold">{article.prix} TND</p>
+                                <div className="card-body">
+                                    <h3>{article.titre}</h3>
+                                    <p className="description">{article.description || "No description available."}</p>
+                                    <p className="price">{article.prix} TND</p>
+                                    <button className="details-btn" onClick={() => setSelectedArticle(article)}>
+                                        Voir détails 🔍
+                                    </button>
                                 </div>
-                                <div className="flex justify-center mt-3">
-                                    <Button
-                                        label="Voir détails"
-                                        icon="pi pi-search"
-                                        className="p-button-sm article-button"
-                                        onClick={() => setSelectedArticle(article)}
-                                    />
-                                </div>
-                            </Card>
+                            </div>
                         ))}
                     </div>
+                </div>
                 )
             )}
 
