@@ -4,32 +4,13 @@ import { Dialog } from 'primereact/dialog';
 import { useState,useEffect } from "react";
 import axios from "axios";
 
-const Articles = ({ articlesWithoutFilter, setSelectedArticle, selectedFilter, categories, sousCategories }) => {
+const Articles = ({ groupedByCategoryAndSubCategory, groupedByCategory,articlesWithoutFilter, setSelectedArticle, selectedFilter, categories, sousCategories }) => {
 
     const [visible, setVisible] = useState(false);
     const [articleIdToFavorite, setArticleIdToFavorite] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
     // Regroupement par catégorie
-    const groupedByCategory = categories?.reduce((acc, category) => {
-        
-        const articlesInCategory = articlesWithoutFilter.filter(article =>
-            sousCategories?.some(sc => sc.id === article.sous_categorie_id && sc.categorie_id == category.id)
-        );
-
-        acc[category.nom] = articlesInCategory;
-        return acc;
-    }, {});
-
-    // Regroupement par catégorie et sous-catégorie
-    const groupedByCategoryAndSubCategory = categories?.reduce((acc, category) => {
-        acc[category.nom] = sousCategories
-            .filter(sc => sc.categorie_id == category.id)
-            .reduce((subAcc, subCategory) => {
-                subAcc[subCategory.nom] = articlesWithoutFilter.filter(article => article.sous_categorie_id === subCategory.id);
-                return subAcc;
-            }, {});
-        return acc;
-    }, {});
+    
 
     const ajoutAuFavoris = (articleId) => {
         axios.post(process.env.REACT_APP_BACKEND_URL + "/controllers/favorisController.php", { articleId })
@@ -43,29 +24,7 @@ const Articles = ({ articlesWithoutFilter, setSelectedArticle, selectedFilter, c
             });
     };
 
-    const GroupedByCategory = ({ groupedByCategory }) => {
-        return (
-            <div className="p-5">
-                <h2 className="text-2xl font-bold mb-4">Parfums par Catégorie</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {Object.entries(groupedByCategory).map(([categoryName, items]) => (
-                        <div key={categoryName} className="p-4 border rounded shadow">
-                            <h3 className="text-xl font-semibold mb-3">{categoryName}</h3>
-                            <div className="space-y-4">
-                                {items.map((item, index) => (
-                                    <div key={index} className="border-b pb-2">
-                                        {/* Vous pouvez personnaliser l'affichage de chaque élément ici */}
-                                        <p>{item.name}</p> {/* Exemple d'affichage d'une propriété 'name' de chaque objet */}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        );
-    };
-    
+  
     
 
 
@@ -98,11 +57,41 @@ const Articles = ({ articlesWithoutFilter, setSelectedArticle, selectedFilter, c
             </div>
         </div>
     );
-
+    const GroupedByCategory = () => {
+        console.log(groupedByCategory);  // Ajoutons un log pour voir si les données sont bien passées
+        return (
+            <div className="p-5">
+                <h2 className="text-2xl font-bold mb-4">Parfums par Catégorie</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {Object.entries(groupedByCategory).map(([categoryName, items]) => (
+                        <div key={categoryName} className="p-4 border rounded shadow">
+                            <h3 className="text-xl font-semibold mb-3">{categoryName}</h3>
+                            <div className="space-y-4">
+                                {items.map((item, index) => (
+                                    <div key={index} className="border-b pb-2">
+                                        <p className="font-bold">{item.titre}</p>
+                                        <p>{item.description}</p>
+                                        <p className="text-gray-500">{item.prix}€</p>
+                                        {item.image ? (
+                                            <img src={item.image} alt={item.titre} className="w-full h-auto mt-2" />
+                                        ) : (
+                                            <p className="text-gray-400">Image non disponible</p>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    };
+    
+    
     return (
         <div className="articles-container">
             {selectedFilter === "category" ? (
-                <GroupedByCategory groupedByCategory={groupedByCategory}/>
+                <GroupedByCategory />
             ) : selectedFilter === "sousCategory" ? (
                 <GroupedByCategoryAndSubCategory />
             ) : (

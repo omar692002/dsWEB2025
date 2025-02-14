@@ -79,6 +79,37 @@ const Home = () => {
         setSearchQuery(e.target.value)
 
     }
+    const groupedByCategory = {};
+
+    // Parcours des catégories
+    for (const category of categories || []) {
+        // Initialisation du tableau pour chaque catégorie
+        groupedByCategory[category.nom] = [];
+    
+        // Parcours des articles
+        for (const article of articlesWithoutFilter) {
+            // Vérification de chaque sous-catégorie pour l'article
+            for (const sc of sousCategories || []) {
+                // Vérification que la sous-catégorie de l'article correspond à celle de la catégorie
+                if (sc.id == article.sous_categorie_id && sc.categorie_id == category.id) {
+                    // Ajouter l'article à la catégorie correspondante
+                    groupedByCategory[category.nom].push(article);
+                    break;  // Sortir de la boucle des sous-catégories une fois l'article trouvé
+                }
+            }
+        }
+    }
+    
+    // Regroupement par catégorie et sous-catégorie
+    const groupedByCategoryAndSubCategory = categories?.reduce((acc, category) => {
+        acc[category.nom] = sousCategories
+            .filter(sc => sc.categorie_id == category.id)
+            .reduce((subAcc, subCategory) => {
+                subAcc[subCategory.nom] = articlesWithoutFilter.filter(article => article.sous_categorie_id === subCategory.id);
+                return subAcc;
+            }, {});
+        return acc;
+    }, {});
 
     return (
         <div>
@@ -90,7 +121,7 @@ const Home = () => {
                 </IconField>
             </div>
 
-            <Articles articlesWithoutFilter={articlesWithoutFilter} setSelectedArticle={setSelectedArticle} selectedFilter={selectedFilter} categories={categories} sousCategories={sousCategories}></Articles>
+            <Articles  groupedByCategoryAndSubCategory={groupedByCategoryAndSubCategory} groupedByCategory={groupedByCategory} articlesWithoutFilter={articlesWithoutFilter} setSelectedArticle={setSelectedArticle} selectedFilter={selectedFilter} categories={categories} sousCategories={sousCategories}></Articles>
             {selectedArticle && (
                 <ArticleDetails header={selectedArticle.titre} visible={!!selectedArticle} selectedArticle={selectedArticle} setSelectedArticle={setSelectedArticle}>
                     </ArticleDetails>
