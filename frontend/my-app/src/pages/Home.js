@@ -3,7 +3,7 @@ import axios from "axios";
 import ArticleDetails from "../components/ArticleDetails";
 import Filters from "../components/Filters"; 
 import "./Home.css";
-import Articles from "../components/ArticleCard";
+import Articles from "../components/Article";
 import { InputIcon } from 'primereact/inputicon';
 import { IconField } from 'primereact/iconfield';
 import { InputText } from 'primereact/inputtext';
@@ -41,6 +41,23 @@ const Home = () => {
         
         fetchData();
     }, []);
+    const [favorites, setFavorites] = useState([]);
+    // const {login,user}=useAuth();
+    // const idUser = user.id;
+
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/controllers/favorisController.php`, {
+            params: {
+                user: 1
+            }
+        })
+        .then(response => {
+            setFavorites(response.data);
+        })
+        .catch(error => {
+            console.error("Error fetching favorites:", error);
+        });
+    }, []);  
 
     
    
@@ -97,7 +114,7 @@ const Home = () => {
                 </IconField>
             </div>
 
-            <Articles  groupedByCategoryAndSubCategory={groupedByCategoryAndSubCategory} groupedByCategory={groupedByCategory} articlesWithoutFilter={articlesWithoutFilter} setSelectedArticle={setSelectedArticle} selectedFilter={selectedFilter}></Articles>
+            <Articles  groupedByCategoryAndSubCategory={groupedByCategoryAndSubCategory} groupedByCategory={groupedByCategory} articlesWithoutFilter={articlesWithoutFilter} setSelectedArticle={setSelectedArticle} selectedFilter={selectedFilter} favorites={favorites} setFavorites={setFavorites}></Articles>
             {selectedArticle && (
                 <ArticleDetails header={selectedArticle.titre} visible={!!selectedArticle} selectedArticle={selectedArticle} setSelectedArticle={setSelectedArticle}>
                     </ArticleDetails>

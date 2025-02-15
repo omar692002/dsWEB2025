@@ -18,9 +18,15 @@ class ArticleRepository {
     public function getById($id): ?Article {
         $stmt = $this->pdo->prepare("SELECT * FROM articles WHERE id = ?");
         $stmt->execute([$id]);
-        
-        return $stmt->fetchObject("Article") ?: null;
+    
+        $data = $stmt->fetch(PDO::FETCH_ASSOC); 
+        if ($data) {
+            return new Article($data); 
+        }
+    
+        return null; // If no data found
     }
+    
 
     public function create(Article $article): bool {
         $stmt = $this->pdo->prepare("INSERT INTO articles (titre, description, prix, image, sous_categorie_id) VALUES (?, ?, ?, ?, ?)");

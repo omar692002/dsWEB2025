@@ -1,13 +1,5 @@
 <?php
-// class Article {
-//     public int $id;
-//     public string $titre;
-//     public string $description;
-//     public float $prix;
-//     public ?string $image;
-//     public int $categorie_id;
-//     public string $date_ajout;
-// }
+
 class Article {
     public int $id;
     public string $titre;
