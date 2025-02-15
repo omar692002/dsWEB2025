@@ -22,7 +22,7 @@ export const LoginForm = ({ onLogin }) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="p-inputtext-lg"
-            placeholder="Enter your email"  // Added placeholder text
+            placeholder="Enter your email"  
           />
         </div>
 
@@ -35,7 +35,7 @@ export const LoginForm = ({ onLogin }) => {
             feedback={false}
             className="p-inputtext-lg"
             type="password"
-            placeholder="Enter your password"  // Added placeholder text
+            placeholder="Enter your password" 
           />
         </div>
 

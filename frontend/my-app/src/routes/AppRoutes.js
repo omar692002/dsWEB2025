@@ -1,7 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import {  Routes, Route} from 'react-router-dom';
 import Home from '../pages/Home';
-import ArticleDetails from '../components/ArticleDetails';
 import Login from '../pages/Login';
 import Favorites from '../pages/Favorites';
 import Navbar from '../components/Navbar';

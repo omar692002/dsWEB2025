@@ -1,9 +1,10 @@
 import React from "react";
-import { Route, Navigate } from "react-router-dom";  
+import {  Navigate } from "react-router-dom";  
 import { useAuth } from './useAuth';  
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
+  if (loading) return <div>Loading...</div>; 
 
   console.log(isAuthenticated);
   

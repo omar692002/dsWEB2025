@@ -3,11 +3,12 @@ import { Menubar } from 'primereact/menubar';
 import { Button } from 'primereact/button';
 import { useNavigate } from 'react-router-dom';
 import './Navbar.css'; // Import the CSS file
-import { useAuth } from '../routes/useAuth'; // Correct import path for useAuth
+import { useAuth } from '../routes/useAuth'; 
+import axios from 'axios';
+
 const Navbar = () => {
     const navigate = useNavigate();
-    const user = JSON.parse(localStorage.getItem('user'));
-    const { isAuthenticated, logout } = useAuth();
+    const { isAuthenticated, logout , user } = useAuth();
     if (!isAuthenticated) return null;
 
     const items = [
@@ -21,7 +22,7 @@ const Navbar = () => {
         <div className="navbar-end">
             <span style={{ display: 'flex', alignItems: 'center' }}>
                 <i className="pi pi-user" style={{ marginRight: '8px', fontSize: '20px' }}></i>
-                <span>{user.nom}</span> 
+                <span>{user?.nom}</span> 
             </span>
 
             <Button 
@@ -29,8 +30,12 @@ const Navbar = () => {
                 label="Logout" 
                 icon="pi pi-sign-out" 
                 onClick={() => {
-                    localStorage.removeItem('user');
-                    logout();  
+                    axios.post(process.env.REACT_APP_BACKEND_URL + "/controllers/utilisateurController.php/api/logout", {}, {
+                        withCredentials: true
+                    }).then((response) => {
+                        logout();  // This will update the auth context
+                    });
+                    
                 }} 
             />
         </div>

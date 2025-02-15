@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { LoginForm } from '../components/LoginForm';
 import { Toast } from 'primereact/toast';  
-import { useNavigate } from 'react-router-dom';  // Import the useNavigate hook
-import { useAuth } from '../routes/useAuth';  // Import the useAuth hook to update the auth state
+import { useAuth } from '../routes/useAuth'; 
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');

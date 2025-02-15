@@ -88,7 +88,9 @@ class UtilisateurController {
 
     private function logout(): void {
         session_start();
-        session_destroy();
+        $_SESSION = []; 
+        session_destroy(); 
+        setcookie(session_name(), '', time() - 3600, '/'); 
         $this->sendResponse(200, ["message" => "Logout successful"]);
     }
 
