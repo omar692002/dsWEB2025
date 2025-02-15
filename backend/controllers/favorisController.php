@@ -12,22 +12,27 @@ $favoriService = new FavoriService();
 // Vérification de la méthode HTTP
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
-        if (isset($_SESSION['user_id'])) {
-            $utilisateur_id = $_SESSION['user_id'];
+    
+        if (isset($_GET['user'])) {
+            $utilisateur_id = $_GET['user'];  
+    
+            // Get favoris for this user
             $favoris = $favoriService->getFavorisByUtilisateur($utilisateur_id);
-
-            echo json_encode( $favoris);
+    
+            echo json_encode($favoris);
         } else {
             echo json_encode(["message" => "Utilisateur non authentifié"]);
         }
         break;
-
+    
     case 'POST':
-        if (isset($_POST['article_id']) && isset($_SESSION['user_id'])) {
-            $utilisateur_id = $_SESSION['user_id']; // ID de l'utilisateur connecté
-            $article_id = $_POST['article_id'];
-
-            // Ajouter l'article aux favoris et renvoyer la réponse
+        $rawData = file_get_contents('php://input');
+        $data = json_decode($rawData, true);
+    
+        if (isset($data['article_id']) && isset($data['user_id'])) {
+            $utilisateur_id = $data['user_id']; // ID de l'utilisateur connecté
+            $article_id = $data['article_id'];
+        
             if ($favoriService->addFavori($utilisateur_id, $article_id)) {
                 echo json_encode(["message" => "Article ajouté aux favoris"]);
             } else {
@@ -39,12 +44,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'DELETE':
-        // Supprimer un article des favoris
-        if (isset($_POST['article_id']) && isset($_SESSION['user_id'])) {
-            $utilisateur_id = $_SESSION['user_id']; // ID de l'utilisateur connecté
-            $article_id = $_POST['article_id'];
-
-            // Supprimer l'article des favoris et renvoyer la réponse
+        $rawData = file_get_contents('php://input');
+        $data = json_decode($rawData, true);
+            if (isset($data['article_id']) && isset($data['user_id'])) {
+            $utilisateur_id = $data['user_id']; 
+            $article_id = $data['article_id'];
             if ($favoriService->removeFavori($utilisateur_id, $article_id)) {
                 echo json_encode(["message" => "Article supprimé des favoris"]);
             } else {

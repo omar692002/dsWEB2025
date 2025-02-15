@@ -1,3 +1,12 @@
+/* Style pour les icônes de cœur */
+.heart-icon {
+    color: red; /* Couleur rouge */
+    font-size: 1.5rem; /* Taille de l'icône */
+}
+
+.heart-icon:hover {
+    color: darkred; /* Couleur rouge foncé au survol */
+}
 .container {
     padding: 20px;
     font-family: Arial, sans-serif;

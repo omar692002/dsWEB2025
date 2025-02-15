@@ -18,13 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 class UtilisateurController {
-    private UtilisateurService $service;
-
+    public UtilisateurService $service;
+    
     public function __construct(UtilisateurService $service) {
         $this->service = $service;
     }
 
-    private function checkSession(): void {
+    public function checkSession(): void {
         session_start();
         if (isset($_SESSION['user'])) {
             $this->sendResponse(200, ["authenticated" => true, "user" => $_SESSION['user']]);
@@ -52,17 +52,22 @@ class UtilisateurController {
         }
     }
 
-    private function login(): void {
+    public function login(): void {
+        // Start the session at the top of your method
+        session_start();
+    
+        // Get input data
         $data = json_decode(file_get_contents("php://input"), true);
+    
         if (!isset($data['email'], $data['password'])) {
             $this->sendResponse(400, ["message" => "Missing fields"]);
             return;
         }
-
+    
+        // Authenticate the user
         $user = $this->service->login($data['email'], $data['password']);
-
+    
         if ($user) {
-            session_start();
             $_SESSION['user'] = [
                 'id' => $user->id,
                 'nom' => $user->nom,
@@ -74,8 +79,9 @@ class UtilisateurController {
             $this->sendResponse(401, ["message" => "Invalid credentials"]);
         }
     }
+    
 
-    private function register(): void {
+    public function register(): void {
         $data = json_decode(file_get_contents("php://input"), true);
     
         if (!isset($data['nom'], $data['email'], $data['password'])) {
@@ -119,7 +125,7 @@ class UtilisateurController {
         $this->sendResponse(200, ["message" => "Logout successful"]);
     }
 
-    private function sendResponse(int $status, array $data): void {
+    public function sendResponse(int $status, array $data): void {
         http_response_code($status);
         echo json_encode($data);
         exit();

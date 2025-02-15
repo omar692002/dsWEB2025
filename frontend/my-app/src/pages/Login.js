@@ -20,7 +20,7 @@ const Login = () => {
       }, { withCredentials: true })
       .then((response) => {
         if (response.data.message === "Login successful") {
-          toast.current.show({ severity: 'success', summary: 'Success', detail: response.data.message });    
+          toast?.current?.show({ severity: 'success', summary: 'Success', detail: response.data.message });    
           login(email,password);          
         }
       })
