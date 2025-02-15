@@ -12,11 +12,10 @@ const Navbar = () => {
     if (!isAuthenticated) return null;
 
     const items = [
-        { label: 'Home', icon: 'pi pi-home', command: () => navigate('/') },
+        { label: 'Home', icon: 'pi pi-home', command: () => navigate('/home') },
         { label: 'Favorites', icon: 'pi pi-heart', command: () => navigate('/favorites') },
     ];
 
-    const start = <img height="40" className="mr-2" alt="Logo" />;
 
     const end =(
         <div className="navbar-end">
@@ -33,7 +32,7 @@ const Navbar = () => {
                     axios.post(process.env.REACT_APP_BACKEND_URL + "/controllers/utilisateurController.php/api/logout", {}, {
                         withCredentials: true
                     }).then((response) => {
-                        logout();  // This will update the auth context
+                        logout();  
                     });
                     
                 }} 
@@ -41,7 +40,7 @@ const Navbar = () => {
         </div>
     ) 
 
-    return <Menubar model={items} start={start} end={end} />;
+    return <Menubar model={items} end={end} />;
 };
 
 export default Navbar;

@@ -25,7 +25,7 @@ class UtilisateurRepository {
         return $stmt->execute([
             'nom' => $utilisateur->nom,
             'email' => $utilisateur->email,
-            'password' => password_hash($utilisateur->password, PASSWORD_BCRYPT),
+            'password' => $utilisateur->password,
             'role' => $utilisateur->role
         ]);
     }
