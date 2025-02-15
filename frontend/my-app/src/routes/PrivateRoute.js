@@ -6,7 +6,6 @@ const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
   if (loading) return <div>Loading...</div>; 
 
-  console.log(isAuthenticated);
   
   return isAuthenticated ? children : <Navigate to="/login" />;
 };

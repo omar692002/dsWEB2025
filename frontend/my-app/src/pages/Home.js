@@ -3,10 +3,11 @@ import axios from "axios";
 import ArticleDetails from "../components/ArticleDetails";
 import Filters from "../components/Filters"; 
 import "./Home.css";
-import Articles from "../components/ArticleCard";
+import Articles from "../components/Articles";
 import { InputIcon } from 'primereact/inputicon';
 import { IconField } from 'primereact/iconfield';
 import { InputText } from 'primereact/inputtext';
+import { useAuth } from '../routes/useAuth'; 
 
 const Home = () => {
     const [articles, setArticles] = useState([]);
@@ -17,9 +18,10 @@ const Home = () => {
     const [selectedFilter, setSelectedFilter] = useState("all");
     const [categories,setCategories]=useState(null);
     const [sousCategories,setSousCategories]=useState(null);
+    const { login,user } = useAuth(); 
 
     const [searchQuery, setSearchQuery] = useState("");
-
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -97,7 +99,7 @@ const Home = () => {
                 </IconField>
             </div>
 
-            <Articles  groupedByCategoryAndSubCategory={groupedByCategoryAndSubCategory} groupedByCategory={groupedByCategory} articlesWithoutFilter={articlesWithoutFilter} setSelectedArticle={setSelectedArticle} selectedFilter={selectedFilter}></Articles>
+            <Articles role={user.role}  groupedByCategoryAndSubCategory={groupedByCategoryAndSubCategory} groupedByCategory={groupedByCategory} articlesWithoutFilter={articlesWithoutFilter} setSelectedArticle={setSelectedArticle} selectedFilter={selectedFilter}></Articles>
             {selectedArticle && (
                 <ArticleDetails header={selectedArticle.titre} visible={!!selectedArticle} selectedArticle={selectedArticle} setSelectedArticle={setSelectedArticle}>
                     </ArticleDetails>

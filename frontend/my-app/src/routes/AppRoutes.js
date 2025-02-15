@@ -1,6 +1,8 @@
 import React from 'react';
 import {  Routes, Route} from 'react-router-dom';
 import Home from '../pages/Home';
+import AddArticle from '../pages/AddArticle';
+
 import Login from '../pages/Login';
 import RegisterPage from '../pages/Register';
 
@@ -21,6 +23,8 @@ const AppRoutes = () => {
                                 <Routes>
                                     <Route path="/home" element={<Home />} />
                                     <Route path="/favorites" element={<Favorites />} />
+                                    <Route path="/add-article" element={<AddArticle />} />  
+
 
                                 </Routes>
                             </ProtectedRoute>

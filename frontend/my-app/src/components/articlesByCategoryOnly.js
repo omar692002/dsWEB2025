@@ -2,7 +2,6 @@ import React from 'react';
 import './articlesByCategoryAndSubCategory.css'
 
 const GroupedByCategory = ({ groupedByCategory }) => {
-    console.log(groupedByCategory); // Vérifier les données en console
 
     return (
         <div className="container">

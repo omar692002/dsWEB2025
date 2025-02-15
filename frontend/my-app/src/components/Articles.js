@@ -4,10 +4,12 @@ import { useState,useEffect } from "react";
 import axios from "axios";
 import GroupedByCategoryAndSubCategory from "./articlesByCategoryAndSubCategory";
 import GroupedByCategory from "./articlesByCategoryOnly";
+import AdminTools from "./adminTools";
+
 import './ArticleCard.css';
 
-const Articles = ({ groupedByCategoryAndSubCategory, groupedByCategory,articlesWithoutFilter, setSelectedArticle, selectedFilter }) => {
-
+const Articles = ({ role,groupedByCategoryAndSubCategory, groupedByCategory,articlesWithoutFilter, setSelectedArticle, selectedFilter }) => {
+    
     const [visible, setVisible] = useState(false);
     const [articleIdToFavorite, setArticleIdToFavorite] = useState(null);
     const [loggedIn, setLoggedIn] = useState(false);
@@ -16,7 +18,6 @@ const Articles = ({ groupedByCategoryAndSubCategory, groupedByCategory,articlesW
     const ajoutAuFavoris = (articleId) => {
         axios.post(process.env.REACT_APP_BACKEND_URL + "/controllers/favorisController.php", { articleId })
             .then(response => {
-                console.log("Article ajouté aux favoris", response.data);
                 setVisible(false);
                 setArticleIdToFavorite(null);
             })
@@ -26,8 +27,6 @@ const Articles = ({ groupedByCategoryAndSubCategory, groupedByCategory,articlesW
     };
 
   
-    
-
     
     return (
         <div className="articles-container">
@@ -45,7 +44,7 @@ const Articles = ({ groupedByCategoryAndSubCategory, groupedByCategory,articlesW
                     <div className="cards-container">
                         {articlesWithoutFilter.map((article) => (
                             <div key={article.id} className="card">
-                                {loggedIn && (
+                                {loggedIn && role!="admin" && (
                                     <div className="favorite-btn">
                                         <button 
                                             onClick={() => {
@@ -57,6 +56,9 @@ const Articles = ({ groupedByCategoryAndSubCategory, groupedByCategory,articlesW
                                         </button>
                                     </div>
                                 )}
+                                 {role === "admin" && (
+                                        <AdminTools article={article}></AdminTools>
+                                    )}
                                 <div className="card-header">
                                     <img 
                                         src={article.image || "/images/default-parfum.jpg"} 

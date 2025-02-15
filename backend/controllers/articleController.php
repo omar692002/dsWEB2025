@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../service/articleService.php';
+ini_set('display_errors', 0);
 
 header("Content-Type: application/json");
 
@@ -19,12 +20,16 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
     
     case 'POST':
-        $data = json_decode(file_get_contents("php://input"), true);
+        $rawData = file_get_contents('php://input');
+
+        $data = json_decode($rawData, true);
+        
         echo json_encode(["message" => $articleService->addArticle($data) ? "Article ajouté" : "Erreur"]);
         break;
 
     case 'PUT':
-        parse_str(file_get_contents("php://input"), $data);
+        $rawData = file_get_contents('php://input');
+        $data = json_decode($rawData, true);
         echo json_encode(["message" => $articleService->updateArticle($_GET['id'], $data) ? "Article modifié" : "Erreur"]);
         break;
 

@@ -3,6 +3,15 @@ require_once __DIR__ . '/../dao/repository/categorieRepository.php';
 require_once __DIR__ . '/../dao/repository/sousCategorieRepository.php';
 require_once __DIR__ . '/../dao/categorieDAO.php';
 require_once __DIR__ . '/../dao/sousCategorieDAO.php';
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Credentials: true");
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 
 class SousCategorieService {
     private $sousCategoryRepo;

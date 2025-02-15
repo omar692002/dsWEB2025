@@ -8,7 +8,7 @@ import axios from 'axios';
 
 const Navbar = () => {
     const navigate = useNavigate();
-    const { isAuthenticated, logout , user } = useAuth();
+    const { isAuthenticated, logout, user } = useAuth();
     if (!isAuthenticated) return null;
 
     const items = [
@@ -16,12 +16,19 @@ const Navbar = () => {
         { label: 'Favorites', icon: 'pi pi-heart', command: () => navigate('/favorites') },
     ];
 
+    if (user?.role === 'admin') {
+        items.push({
+            label: 'Add Article',
+            icon: 'pi pi-plus',
+            command: () => navigate('/add-article') 
+        });
+    }
 
-    const end =(
+    const end = (
         <div className="navbar-end">
             <span style={{ display: 'flex', alignItems: 'center' }}>
                 <i className="pi pi-user" style={{ marginRight: '8px', fontSize: '20px' }}></i>
-                <span>{user?.nom}</span> 
+                <span>{user?.nom}</span>
             </span>
 
             <Button 
@@ -32,13 +39,12 @@ const Navbar = () => {
                     axios.post(process.env.REACT_APP_BACKEND_URL + "/controllers/utilisateurController.php/api/logout", {}, {
                         withCredentials: true
                     }).then((response) => {
-                        logout();  
+                        logout();
                     });
-                    
                 }} 
             />
         </div>
-    ) 
+    );
 
     return <Menubar model={items} end={end} />;
 };

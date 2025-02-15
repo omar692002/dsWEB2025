@@ -22,7 +22,6 @@ import { useNavigate } from 'react-router-dom';
           password: password
       })
       .then((response) => {
-        console.log(response);
         
         if (response.data.message === "User registered successfully") {
           toast.current.show({ severity: 'success', summary: 'Success', detail: response.data.message });    
