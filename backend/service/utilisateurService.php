@@ -1,31 +1,34 @@
 <?php
 require_once __DIR__ . '/../dao/repository/utilisateurRepository.php';
-
 class UtilisateurService {
-    private $utilisateurRepository;
+    private UtilisateurRepository $repository;
 
-    public function __construct() {
-        $this->utilisateurRepository = new UtilisateurRepository();
+    public function __construct(UtilisateurRepository $repository) {
+        $this->repository = $repository;
     }
 
-    public function getAllUsers(): array {
-        $users = $this->utilisateurRepository->getAll();
-        
-        error_log("Fetched users: " . print_r($users, true)); // Log the fetched data
-    
-        return $users;
-    }
-    
-
-    public function getUserById($id): ?Utilisateur {
-        return $this->utilisateurRepository->getById($id);
+    public function login(string $email, string $password): ?Utilisateur {
+        $user = $this->repository->findByEmail($email);
+        if ($user && $user->password === $password) {
+            return $user;
+        }
+        return null;
     }
 
-    public function addUser($data): bool {
-        $user = new Utilisateur($data);
-        return $this->utilisateurRepository->create($user);
+    public function register(string $nom, string $email, string $password, string $role = 'user'): bool {
+        if ($this->repository->findByEmail($email)) {
+            return false; 
+        }
+
+        $user = new Utilisateur([
+           
+            'nom' => $nom,
+            'email' => $email,
+            'password' => $password, 
+            'role' => $role
+        ]);
+
+        return $this->repository->save($user);
     }
-
-
 }
 ?>

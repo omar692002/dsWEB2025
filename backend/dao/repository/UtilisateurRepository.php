@@ -3,35 +3,31 @@ require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../utilisateurDAO.php';
 
 class UtilisateurRepository {
-    private $pdo;
+    private PDO $db;
 
-    public function __construct() {
-        $this->pdo = Database::getInstance();
+    public function __construct(PDO $db) {
+        $this->db = $db;
     }
 
-    public function getAll(): array {
-        $stmt = $this->pdo->query("SELECT * FROM users");
-        $usersArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return array_map(fn($row) => new Utilisateur($row), $usersArray);
+    public function findByEmail(string $email): ?Utilisateur {
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $row ? new Utilisateur($row) : null;
     }
 
-    public function getById($id): ?Utilisateur {
-        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id = ?");
-        $stmt->execute([$id]);
-        
-        return $stmt->fetchObject("User") ?: null;
-    }
-
-    public function create(Utilisateur $user): bool {
-        $stmt = $this->pdo->prepare("INSERT INTO articles (nom, email, password,role) VALUES (?, ?, ?, ?)");
+    public function save(Utilisateur $utilisateur): bool {
+        $stmt = $this->db->prepare("
+            INSERT INTO users (nom, email, password, role) 
+            VALUES (:nom, :email, :password, :role)
+        ");
         return $stmt->execute([
-            $user->nom, 
-            $user->email, 
-            $user->password, 
-            $user->role, 
+            'nom' => $utilisateur->nom,
+            'email' => $utilisateur->email,
+            'password' => password_hash($utilisateur->password, PASSWORD_BCRYPT),
+            'role' => $utilisateur->role
         ]);
     }
-
-
 }
 ?>
