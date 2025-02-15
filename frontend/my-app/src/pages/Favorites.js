@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
+import { useAuth } from '../routes/useAuth'; 
 
 const Favorites = () => {
     const [favorites, setFavorites] = useState([]);
-    // const {login,user}=useAuth();
-    // const idUser = user.id;
+    const { login,user } = useAuth(); 
+
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_BACKEND_URL}/controllers/favorisController.php`, {
             params: {
-                user: 1
+                user: user.id
             }
         })
         .then(response => {

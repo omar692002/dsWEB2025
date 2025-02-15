@@ -44,13 +44,12 @@ const Home = () => {
         fetchData();
     }, []);
     const [favorites, setFavorites] = useState([]);
-    // const {login,user}=useAuth();
-    // const idUser = user.id;
+   
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_BACKEND_URL}/controllers/favorisController.php`, {
             params: {
-                user: 1
+                user: user.id
             }
         })
         .then(response => {
@@ -116,7 +115,7 @@ const Home = () => {
                 </IconField>
             </div>
 
-            <Articles role={user.role}  groupedByCategoryAndSubCategory={groupedByCategoryAndSubCategory} groupedByCategory={groupedByCategory} articlesWithoutFilter={articlesWithoutFilter} setSelectedArticle={setSelectedArticle} selectedFilter={selectedFilter} favorites={favorites} setFavorites={setFavorites}></Articles>
+            <Articles role={user?.role}  groupedByCategoryAndSubCategory={groupedByCategoryAndSubCategory} groupedByCategory={groupedByCategory} articlesWithoutFilter={articlesWithoutFilter} setSelectedArticle={setSelectedArticle} selectedFilter={selectedFilter} favorites={favorites} setFavorites={setFavorites}></Articles>
             {selectedArticle && (
                 <ArticleDetails header={selectedArticle.titre} visible={!!selectedArticle} selectedArticle={selectedArticle} setSelectedArticle={setSelectedArticle}>
                     </ArticleDetails>

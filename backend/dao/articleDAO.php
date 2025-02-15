@@ -10,6 +10,7 @@ class Article {
     public string $date_ajout;
 
     public function __construct(array $data) {
+        $this->id = $data["id"]??0;
         $this->titre = $data['titre'];
         $this->description = $data['description'];
         $this->prix = (float) $data['prix'];

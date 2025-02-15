@@ -9,28 +9,10 @@ import './ArticleCard.css';
 import AdminTools from "./adminTools";
 
 
-const Articles = ({ role, groupedByCategoryAndSubCategory, groupedByCategory,articlesWithoutFilter, setSelectedArticle, selectedFilter }) => {
+const ArticleCard = ({ role, article,loggedIn,isFavorite,onFavoriteClick,setSelectedArticle }) => {
 
-    const [visible, setVisible] = useState(false);
-    const [articleIdToFavorite, setArticleIdToFavorite] = useState(null);
-    const [loggedIn, setLoggedIn] = useState(false);
-    
-
-    const ajoutAuFavoris = (articleId) => {
-        axios.post(process.env.REACT_APP_BACKEND_URL + "/controllers/favorisController.php", { articleId })
-            .then(response => {
-                console.log("Article ajouté aux favoris", response.data);
-                setVisible(false);
-                setArticleIdToFavorite(null);
-            })
-            .catch(error => {
-                console.error("Erreur lors de l'ajout aux favoris", error);
-            });
-    };
-
-  
-    
-
+    console.log(isFavorite
+    );
     
     return (
         <div className="card">

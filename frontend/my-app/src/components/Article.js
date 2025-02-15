@@ -7,8 +7,10 @@ import FavoriteDialog from "./Favoris";
 import { Toast } from "primereact/toast";
 import './ArticleCard.css';
 import DeleteFavoriteDialog from "./DeleteFavoriteDialog";
+import { useAuth } from '../routes/useAuth'; 
 
 const Articles = ({
+    role,
     groupedByCategoryAndSubCategory,
     groupedByCategory,
     articlesWithoutFilter,
@@ -20,10 +22,10 @@ const Articles = ({
     const [visibleAddDialog, setVisibleAddDialog] = useState(false);
     const [visibleDeleteDialog, setVisibleDeleteDialog] = useState(false);
     const [articleIdToFavorite, setArticleIdToFavorite] = useState(null);
-    const [loggedIn, setLoggedIn] = useState(1);
     const [loading, setIsLoading] = useState(false);
     const toast = useRef(null);
-
+    const { user } = useAuth(); 
+    console.log("fav",favorites)
     const isFavorite = (articleId) => {
         return favorites.some(favorite => favorite.id === articleId);
     };
@@ -33,7 +35,7 @@ const Articles = ({
         axios.post(process.env.REACT_APP_BACKEND_URL + "/controllers/favorisController.php", 
             { 
                 article_id: articleId,
-                user_id: loggedIn
+                user_id: user.id
             })
             .then(() => {
                 const articleToAdd = articlesWithoutFilter.find(article => article.id === articleId);
@@ -58,7 +60,7 @@ const Articles = ({
         axios.delete(process.env.REACT_APP_BACKEND_URL + "/controllers/favorisController.php", {
             data: {
                 article_id: articleId,
-                user_id: loggedIn
+                user_id: user.id
             }
         })
         .then(() => {
@@ -106,10 +108,11 @@ const Articles = ({
                                 <ArticleCard
                                     key={article.id}
                                     article={article}
-                                    loggedIn={loggedIn}
+                                    loggedIn={user.id}
                                     isFavorite={isFavorite(article.id)}
                                     onFavoriteClick={() => handleFavoriteClick(article.id)}
                                     setSelectedArticle={setSelectedArticle}
+                                    role={role}
                                 />
                             ))}
                         </div>
