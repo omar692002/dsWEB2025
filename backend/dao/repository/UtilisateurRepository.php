@@ -22,12 +22,16 @@ class UtilisateurRepository {
             INSERT INTO users (nom, email, password, role) 
             VALUES (:nom, :email, :password, :role)
         ");
-        return $stmt->execute([
+        $stmt->execute([
             'nom' => $utilisateur->nom,
             'email' => $utilisateur->email,
             'password' => $utilisateur->password,
             'role' => $utilisateur->role
         ]);
+    
+        $utilisateur->id = $this->db->lastInsertId();
+        
+        return true;
     }
 }
 ?>

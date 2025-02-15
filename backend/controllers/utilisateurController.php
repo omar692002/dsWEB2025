@@ -1,14 +1,22 @@
 <?php
 require_once __DIR__ . '/../service/utilisateurService.php';
+
 header("Access-Control-Allow-Origin: http://localhost:3000");  // This is your frontend's URL
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json");
+
+// Disable error display in production for security purposes
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/../logs/php_errors.log');  // Ensure proper logging of errors
+
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
+
 class UtilisateurController {
     public UtilisateurService $service;
     
@@ -34,14 +42,13 @@ class UtilisateurController {
         } 
         elseif($method === 'GET' && preg_match('/\/api\/check-session$/', $path)){
             $this->checkSession();
-
         }
         elseif ($method === 'POST' && preg_match('/\/api\/register$/', $path)) {
             $this->register();
         } elseif ($method === 'POST' && preg_match('/\/api\/logout$/', $path)) {
             $this->logout();
         } else {
-            $this->sendResponse(400, ["error" => "Invalid request"]);
+            $this->sendResponse(400, ["message" => "Invalid request"]);
         }
     }
 
@@ -53,7 +60,7 @@ class UtilisateurController {
         $data = json_decode(file_get_contents("php://input"), true);
     
         if (!isset($data['email'], $data['password'])) {
-            $this->sendResponse(400, ["error" => "Missing fields"]);
+            $this->sendResponse(400, ["message" => "Missing fields"]);
             return;
         }
     
@@ -69,26 +76,48 @@ class UtilisateurController {
             ];
             $this->sendResponse(200, ["message" => "Login successful", "user" => $_SESSION['user']]);
         } else {
-            $this->sendResponse(401, ["error" => "Invalid credentials"]);
+            $this->sendResponse(401, ["message" => "Invalid credentials"]);
         }
     }
     
 
     public function register(): void {
         $data = json_decode(file_get_contents("php://input"), true);
+    
         if (!isset($data['nom'], $data['email'], $data['password'])) {
-            $this->sendResponse(400, ["error" => "Missing fields"]);
+            $this->sendResponse(400, ["message" => "Missing fields"]);
             return;
         }
-
-        if ($this->service->register($data['nom'], $data['email'], $data['password'])) {
-            $this->sendResponse(201, ["message" => "User registered successfully"]);
-        } else {
-            $this->sendResponse(409, ["error" => "Email already exists"]);
+    
+        try {
+            // Attempt to register the user using the service
+            if ($this->service->register($data['nom'], $data['email'], $data['password'])) {
+                session_start();
+    
+                // Fetch user ID after successful registration
+                $userId = $this->service->getUserIdByEmail($data['email']);
+                if ($userId) {
+                    // Create the user session data
+                    $_SESSION['user'] = [
+                        'id' => $userId,
+                        'nom' => $data['nom'],
+                        'email' => $data['email'],
+                        'role' => 'user'  // Default to user role
+                    ];
+                    $this->sendResponse(201, ["message" => "User registered successfully"]);
+                } else {
+                    $this->sendResponse(500, ["message" => "Failed to retrieve user ID"]);
+                }
+            } else {
+                $this->sendResponse(409, ["message" => "Email already exists"]);
+            }
+        } catch (Exception $e) {
+            // Catch any exceptions and return a clean error message
+            $this->sendResponse(500, ["message" => "Internal server error: " . $e->getMessage()]);
         }
     }
-
-    public function logout(): void {
+    
+    private function logout(): void {
         session_start();
         $_SESSION = []; 
         session_destroy(); 

@@ -14,6 +14,12 @@ class UtilisateurService {
         }
         return null;
     }
+    public function getUserIdByEmail(string $email): ?int {
+        $user = $this->repository->findByEmail($email);
+        return $user ? $user->id : null;
+
+
+    }
 
     public function register(string $nom, string $email, string $password, string $role = 'user'): bool {
         if ($this->repository->findByEmail($email)) {
