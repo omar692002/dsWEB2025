@@ -7,7 +7,7 @@ class Utilisateur {
     public string $role;
 
     public function __construct(array $row) {
-        $this->id = (int) $row['id']; 
+        $this->id = (int) $row['id']  ?? null; 
         $this->nom = $row['nom'];
         $this->email = $row['email'];
         $this->password = $row['password'];
